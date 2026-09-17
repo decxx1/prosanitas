@@ -1,0 +1,212 @@
+---
+import { pagePaddingClass } from '@/data/layout';
+
+const slides = [
+  {
+    src: '/images/hero/soluciones-medicas.webp',
+    width: 1920,
+    height: 682,
+    alt: 'Equipo de salud uniendo las manos en círculo.',
+    titleHtml: 'Soluciones médicas integrales para el hogar, las empresas y las ART.',
+    titleClass: 'font-bold',
+  },
+  {
+    src: '/images/hero/cuidar-tu-salud.webp',
+    width: 1920,
+    height: 681,
+    alt: 'Profesional de la salud sosteniendo las manos de un paciente.',
+    titleHtml:
+      '<span class="font-bold">Innovando en la forma de cuidar tu salud</span><br /><span class="font-normal">En tu hogar • En tu empresa</span>',
+    titleClass: '',
+  },
+];
+---
+
+<section
+  class="relative isolate h-[calc(100svh-var(--header-height))] min-h-112 overflow-hidden bg-hero-filter"
+  data-hero-carousel
+  aria-roledescription="carrusel"
+  aria-label="Presentación Prosanitas"
+>
+  <div class="absolute inset-0">
+    {
+      slides.map((slide, index) => (
+        <div
+          class:list={[
+            'absolute inset-0 transition-opacity duration-900 ease-out motion-reduce:transition-none',
+            index === 0 ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0',
+          ]}
+          data-slide
+          aria-hidden={index === 0 ? 'false' : 'true'}
+          aria-label={`Diapositiva ${index + 1} de ${slides.length}`}
+        >
+          <img
+            src={slide.src}
+            alt={slide.alt}
+            width={slide.width}
+            height={slide.height}
+            class:list={[
+              'absolute inset-0 size-full object-cover object-center transition-transform duration-7000 linear motion-reduce:transform-none motion-reduce:transition-none',
+              index === 0 ? 'scale-100' : 'scale-105',
+            ]}
+            loading={index === 0 ? 'eager' : 'lazy'}
+            fetchpriority={index === 0 ? 'high' : 'auto'}
+            decoding={index === 0 ? 'sync' : 'async'}
+          />
+        </div>
+      ))
+    }
+  </div>
+
+  <div class="pointer-events-none absolute inset-0 z-1 bg-hero-filter/20" aria-hidden="true"></div>
+
+  <img
+    src="/images/icons/shape-transparent-iso.svg"
+    alt=""
+    width="1024"
+    height="772"
+    class="pointer-events-none absolute top-1/2 right-[-10%] z-2 w-[min(120vw,50rem)] -translate-y-1/2 select-none sm:right-[-8%] sm:right-[-16%] lg:right-[-10%] sm:w-[min(120vw,30rem)] md:w-[min(100vw,40rem)] lg:w-[min(62vw,46rem)] xl:right-[-6%]"
+    aria-hidden="true"
+  />
+
+  <div class:list={[pagePaddingClass, 'relative z-10 flex h-full flex-col justify-start pt-16 sm:pt-20 lg:pt-24']}>
+    <div class="grid max-w-160 xl:max-w-220">
+      {
+        slides.map((slide, index) => (
+          <div
+            class:list={[
+              'relative col-start-1 row-start-1 transition-opacity duration-900 ease-out motion-reduce:transition-none',
+              index === 0 ? 'pointer-events-auto z-1 opacity-100' : 'pointer-events-none opacity-0',
+            ]}
+            data-copy
+            aria-hidden={index === 0 ? 'false' : 'true'}
+          >
+            <h1
+              class:list={[
+                'text-3xl leading-tight tracking-wider text-white sm:text-4xl lg:text-5xl xl:text-6xl',
+                slide.titleClass,
+              ]}
+              set:html={slide.titleHtml}
+            />
+          </div>
+        ))
+      }
+    </div>
+
+    <div class="absolute inset-x-0 bottom-7 flex items-center justify-center gap-3" role="tablist" aria-label="Diapositivas">
+      {
+        slides.map((_, index) => (
+          <button
+            type="button"
+            class:list={[
+              'size-2.5 rounded-full shadow-[inset_0_0_0_1.5px_#f3f3ee] transition-colors',
+              index === 0 ? 'bg-cream' : 'bg-transparent',
+            ]}
+            data-dot
+            role="tab"
+            aria-label={`Ir a la diapositiva ${index + 1}`}
+            aria-selected={index === 0 ? 'true' : 'false'}
+          />
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-hero-carousel]');
+  if (root && !root.dataset.ready) {
+    root.dataset.ready = 'true';
+    const slides = [...root.querySelectorAll<HTMLElement>('[data-slide]')];
+    const copies = [...root.querySelectorAll<HTMLElement>('[data-copy]')];
+    const dots = [...root.querySelectorAll<HTMLButtonElement>('[data-dot]')];
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let index = 0;
+    let timer: number | undefined;
+
+    const setSlideActive = (slide: HTMLElement, active: boolean) => {
+      const image = slide.querySelector('img');
+      slide.classList.toggle('opacity-100', active);
+      slide.classList.toggle('opacity-0', !active);
+      slide.classList.toggle('pointer-events-auto', active);
+      slide.classList.toggle('pointer-events-none', !active);
+      image?.classList.toggle('scale-100', active);
+      image?.classList.toggle('scale-105', !active);
+    };
+
+    const setCopyActive = (copy: HTMLElement, active: boolean) => {
+      copy.classList.toggle('opacity-100', active);
+      copy.classList.toggle('opacity-0', !active);
+      copy.classList.toggle('pointer-events-auto', active);
+      copy.classList.toggle('pointer-events-none', !active);
+      copy.classList.toggle('z-1', active);
+    };
+
+    const setDotActive = (dot: HTMLButtonElement, active: boolean) => {
+      dot.classList.toggle('bg-cream', active);
+      dot.classList.toggle('bg-transparent', !active);
+      dot.setAttribute('aria-selected', active ? 'true' : 'false');
+    };
+
+    const go = (next: number) => {
+      index = (next + slides.length) % slides.length;
+      slides.forEach((slide, i) => {
+        const active = i === index;
+        setSlideActive(slide, active);
+        slide.setAttribute('aria-hidden', active ? 'false' : 'true');
+      });
+      copies.forEach((copy, i) => {
+        const active = i === index;
+        setCopyActive(copy, active);
+        copy.setAttribute('aria-hidden', active ? 'false' : 'true');
+      });
+      dots.forEach((dot, i) => setDotActive(dot, i === index));
+    };
+
+    const stop = () => {
+      if (timer !== undefined) {
+        window.clearInterval(timer);
+        timer = undefined;
+      }
+    };
+
+    const play = () => {
+      if (reduced) return;
+      stop();
+      timer = window.setInterval(() => go(index + 1), 6500);
+    };
+
+    dots.forEach((dot, i) => {
+      dot.addEventListener('click', () => {
+        go(i);
+        play();
+      });
+    });
+
+    root.addEventListener('mouseenter', stop);
+    root.addEventListener('mouseleave', play);
+    root.addEventListener('focusin', stop);
+    root.addEventListener('focusout', (event) => {
+      if (!root.contains(event.relatedTarget as Node | null)) play();
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (!root.matches(':hover') && document.activeElement !== root && !root.contains(document.activeElement)) return;
+      if (event.key === 'ArrowRight') {
+        go(index + 1);
+        play();
+      }
+      if (event.key === 'ArrowLeft') {
+        go(index - 1);
+        play();
+      }
+    });
+
+    play();
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) stop();
+      else play();
+    });
+  }
+</script>

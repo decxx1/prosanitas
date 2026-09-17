@@ -1,0 +1,57 @@
+@import '@fontsource-variable/inter-tight/wght.css';
+@import '@fontsource-variable/inter-tight/wght-italic.css';
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Inter Tight Variable', ui-sans-serif, system-ui, sans-serif;
+
+  --color-cream: #f3f3ee;
+  --color-cyan: #4693b6;
+  --color-cyan-dark: #2f6f8c;
+  --color-hero-filter: #296583;
+
+  --color-brand-50: #effdf7;
+  --color-brand-100: #d8f8e9;
+  --color-brand-200: #b4efd7;
+  --color-brand-300: #7fe0bd;
+  --color-brand-400: #45c89e;
+  --color-brand-500: #20ad83;
+  --color-brand-600: #138b6a;
+  --color-brand-700: #126f57;
+  --color-brand-800: #125846;
+  --color-brand-900: #10493b;
+  --color-brand-950: #082a23;
+}
+
+@layer base {
+  :root {
+    color-scheme: light;
+    font-family: var(--font-sans);
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    --header-height: 4.5rem;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    min-width: 320px;
+    margin: 0;
+    background: #f3f3ee;
+    color: #143246;
+  }
+
+  button,
+  input,
+  textarea,
+  select {
+    font: inherit;
+  }
+
+  :focus-visible {
+    outline: 3px solid #4693b6;
+    outline-offset: 3px;
+  }
+}

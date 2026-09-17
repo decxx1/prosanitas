@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-17T21:05:00.000Z",
+  "title": "Design System: Prosanitas Salud",
+  "extensions": {
+    "colorMeta": {
+      "cream": { "role": "neutral", "displayName": "Crema", "canonical": "#f3f3ee" },
+      "cyan": { "role": "primary", "displayName": "Cian Prosanitas", "canonical": "#4693b6" },
+      "cyan-dark": { "role": "primary", "displayName": "Cian oscuro", "canonical": "#2f6f8c" },
+      "ink": { "role": "neutral", "displayName": "Tinta", "canonical": "#143246" },
+      "hero-veil": { "role": "neutral", "displayName": "Velo hero", "canonical": "#163044" },
+      "white": { "role": "neutral", "displayName": "Blanco", "canonical": "#ffffff" }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Titulares del hero." },
+      "nav": { "displayName": "Nav", "purpose": "Enlaces en mayúsculas del header." },
+      "body": { "displayName": "Body", "purpose": "Texto de página." }
+    },
+    "shadows": [
+      {
+        "name": "menu-mobile",
+        "value": "0 12px 28px rgba(20, 50, 70, 0.12)",
+        "purpose": "Panel del menú móvil bajo el header."
+      }
+    ],
+    "motion": [
+      {
+        "name": "hero-crossfade",
+        "value": "opacity 0.9s ease",
+        "purpose": "Cruce de diapositivas del hero."
+      }
+    ],
+    "breakpoints": [
+      { "name": "lg", "value": "1024px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Nav link",
+      "kind": "nav",
+      "refersTo": "nav-link",
+      "description": "Enlace de cabecera en cian, mayúsculas y tracking amplio.",
+      "html": "<a class=\"ds-nav-link\" href=\"#\">QUIÉNES SOMOS</a>",
+      "css": ".ds-nav-link { color: #4693b6; font: 600 0.72rem/1.2 \"Inter Tight Variable\", sans-serif; letter-spacing: 0.16em; text-transform: uppercase; text-decoration: none; } .ds-nav-link:hover { color: #2f6f8c; } .ds-nav-link:focus-visible { outline: 3px solid #4693b6; outline-offset: 3px; }"
+    },
+    {
+      "name": "Hero headline",
+      "kind": "custom",
+      "refersTo": "hero-headline",
+      "description": "Titular blanco del carrusel.",
+      "html": "<h1 class=\"ds-hero-headline\">Soluciones médicas integrales para el hogar, las empresas y las ART.</h1>",
+      "css": ".ds-hero-headline { color: #fff; font: 700 clamp(1.9rem, 4.5vw, 3.65rem)/1.12 \"Inter Tight Variable\", sans-serif; letter-spacing: -0.03em; margin: 0; max-width: 35rem; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "Foto a sangre, wordmark cian sobre crema.",
+    "overview": "El sitio se presenta con una barra crema y un hero fotográfico a viewport, no con un layout de clínica en tarjetas.",
+    "keyCharacteristics": [
+      "Wordmark cian #4693b6 sobre crema #f3f3ee",
+      "Hero a sangre con isotipo marfil fijo a la derecha",
+      "Titular blanco a la izquierda, sin kicker"
+    ],
+    "rules": [
+      {
+        "name": "Isotipo quieto",
+        "body": "El SVG de casa y corazón no pertenece a cada slide; permanece mientras cruzan las fotos.",
+        "section": "layout"
+      }
+    ],
+    "dos": [
+      "Usar el wordmark verboso cyan en el header.",
+      "Compartir el inset horizontal entre logo y titular."
+    ],
+    "donts": [
+      "No reintroducir el header de ejemplo con pastilla PS.",
+      "No animar visibility en el carrusel; solo opacity."
+    ]
+  }
+}

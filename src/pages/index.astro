@@ -1,0 +1,31 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import HeroCarousel from '@/components/HeroCarousel.astro';
+
+const title = 'Prosanitas Salud | Cuidamos tu bienestar';
+const metaDescription =
+  'Soluciones médicas integrales para el hogar, las empresas y las ART. Innovando en la forma de cuidar tu salud.';
+---
+
+<BaseLayout
+  {title}
+  {metaDescription}
+  canonical="/"
+  fullImg="/images/hero/soluciones-medicas.webp"
+  twitterCard="summary_large_image"
+  preLoad={[
+    { href: '/images/hero/soluciones-medicas.webp', as: 'image', type: 'image/webp' },
+    { href: '/images/logos/prosanitas-cyan.svg', as: 'image', type: 'image/svg+xml' },
+  ]}
+  structuredData={{
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'Prosanitas Salud',
+    url: 'https://prosanitassalud.com.ar',
+    logo: 'https://prosanitassalud.com.ar/images/logos/favicon/favicon.svg',
+  }}
+>
+  <main id="contenido">
+    <HeroCarousel />
+  </main>
+</BaseLayout>

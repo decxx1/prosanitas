@@ -1,0 +1,136 @@
+---
+import { SITE_KEY } from 'astro:env/client';
+import SiteHeader from '@/components/SiteHeader.astro';
+import '@/styles/global.css';
+
+export interface PreloadResource {
+  href: string;
+  as: 'audio' | 'document' | 'embed' | 'fetch' | 'font' | 'image' | 'object' | 'script' | 'style' | 'track' | 'video' | 'worker';
+  type?: string;
+  crossorigin?: 'anonymous' | 'use-credentials';
+}
+
+export interface Props {
+  title: string;
+  metaDescription: string;
+  canonical?: string | URL;
+  fullImg?: string | URL;
+  preLoad?: PreloadResource[];
+  lang?: string;
+  robots?: string;
+  googlebot?: string;
+  ogType?: 'website' | 'article' | 'profile';
+  ogLocale?: string;
+  siteName?: string;
+  twitterCard?: 'summary' | 'summary_large_image';
+  twitterSite?: string;
+  themeColor?: string;
+  structuredData?: Record<string, unknown> | Record<string, unknown>[];
+}
+
+const {
+  title,
+  metaDescription,
+  canonical,
+  fullImg = '/images/logos/favicon/favicon.svg',
+  preLoad = [],
+  lang = 'es-AR',
+  robots = 'index, follow',
+  googlebot = 'index, follow',
+  ogType = 'website',
+  ogLocale = 'es_AR',
+  siteName = 'Prosanitas Salud',
+  twitterCard = 'summary',
+  twitterSite = '@',
+  themeColor = '#4693b6',
+  structuredData,
+} = Astro.props;
+
+const site = Astro.site ?? new URL('https://prosanitassalud.com.ar');
+const canonicalUrl = new URL(canonical?.toString() ?? Astro.url.pathname, site);
+const socialImageUrl = new URL(fullImg.toString(), site);
+const recaptchaUrl = SITE_KEY
+  ? `https://www.google.com/recaptcha/api.js?render=${encodeURIComponent(SITE_KEY)}`
+  : undefined;
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="theme-color" content={themeColor} />
+
+    <title>{title}</title>
+    <meta name="description" content={metaDescription} />
+    <link rel="canonical" href={canonicalUrl} />
+
+    <meta http-equiv="Cache-Control" content="no-cache" />
+    <meta http-equiv="Expires" content="Mon, 01 Jul 1970 00:00:00 GMT" />
+    <meta name="robots" content={robots} />
+    <meta name="googlebot" content={googlebot} />
+
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <!-- Favicons -->
+    <link href="/images/logos/favicon/favicon.svg" type="image/svg+xml" rel="icon" />
+
+    <!-- Favicon compatibilidad -->
+    <link href="/images/logos/favicon/faviconx56.png" type="image/png" sizes="56x56" rel="icon" />
+    <link href="/images/logos/favicon/faviconx32.png" type="image/png" sizes="32x32" rel="icon" />
+    <link href="/images/logos/favicon/faviconx16.png" type="image/png" sizes="16x16" rel="icon" />
+    <link href="/images/logos/favicon/faviconx180.png" rel="apple-touch-icon" sizes="180x180" />
+
+    <!-- Facebook / Open Graph -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={metaDescription} />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={socialImageUrl} />
+    <meta property="og:locale" content={ogLocale} />
+    <meta property="og:site_name" content={siteName} />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content={twitterCard} />
+    <meta name="twitter:site" content={twitterSite} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={metaDescription} />
+    <meta name="twitter:url" content={canonicalUrl} />
+    <meta name="twitter:image" content={socialImageUrl} />
+
+    <!-- Preconnect para Google reCAPTCHA -->
+    <link rel="preconnect" href="https://www.google.com" />
+    <link rel="preconnect" href="https://www.gstatic.com" crossorigin />
+
+    {preLoad.map(({ href, as, type, crossorigin }) => (
+      <link rel="preload" href={href} as={as} type={type} crossorigin={crossorigin} />
+    ))}
+
+    {structuredData && (
+      <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+    )}
+
+    <slot name="head" />
+
+    {recaptchaUrl && <script is:inline async src={recaptchaUrl}></script>}
+  </head>
+  <body>
+    <!--
+      THESIS: Cuidado médico a sangre, no un hero en caja de clínica.
+      OWN-WORLD: Barra crema #f3f3ee, wordmark cian #4693b6, foto a sangre, isotipo marfil al 50%.
+      STORY: Prosanitas resuelve salud en el hogar, la empresa y las ART.
+      FIRST VIEWPORT: Wordmark izquierda, nav mayúsculas a la derecha; titular blanco a la izquierda; isotipo a la derecha.
+      FORM: Mockup del cliente; pedido preciso, sin concept-seed.
+      FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
+    -->
+    <a
+      href="#contenido"
+      class="sr-only fixed left-4 top-4 z-50 rounded-md bg-cyan px-4 py-2 text-white focus:not-sr-only"
+    >
+      Saltar al contenido
+    </a>
+    <SiteHeader />
+    <slot />
+  </body>
+</html>

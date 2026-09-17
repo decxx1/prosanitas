@@ -1,0 +1,110 @@
+---
+import { pagePaddingClass } from '@/data/layout';
+import { navigation } from '@/data/navigation';
+
+const currentHash = Astro.url.hash;
+---
+
+<header class="sticky top-0 z-50 h-(--header-height) bg-cream">
+  <div class:list={[pagePaddingClass, 'flex h-full items-center justify-between gap-6']}>
+    <a href="/" class="shrink-0" aria-label="Prosanitas, inicio">
+      <img
+        src="/images/logos/prosanitas-cyan.svg"
+        alt="Prosanitas"
+        width="268"
+        height="16"
+        class="h-3.5 w-auto sm:h-4"
+      />
+    </a>
+
+    <nav class="hidden items-center gap-8 lg:flex xl:gap-10" aria-label="Principal">
+      {
+        navigation.map((item) => {
+          const isCurrent = currentHash.length > 0 && item.href.endsWith(currentHash);
+          return (
+            <a
+              href={item.href}
+              class="text-[0.72rem] font-semibold tracking-[0.16em] text-cyan uppercase transition-colors hover:text-cyan-dark"
+              aria-current={isCurrent ? 'page' : undefined}
+            >
+              {item.label}
+            </a>
+          );
+        })
+      }
+    </nav>
+
+    <button
+      type="button"
+      class="inline-flex size-11 items-center justify-center text-cyan lg:hidden"
+      data-menu-toggle
+      aria-expanded="false"
+      aria-controls="menu-movil"
+      aria-label="Abrir menú"
+    >
+      <span class="sr-only">Menú</span>
+      <svg class="size-6" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path data-menu-open-icon d="M4 7h16M4 17h16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path>
+        <path data-menu-close-icon class="hidden" d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path>
+      </svg>
+    </button>
+  </div>
+
+  <div
+    id="menu-movil"
+    class="absolute inset-x-0 top-full hidden border-t border-cyan/15 bg-cream shadow-[0_12px_28px_rgba(20,50,70,0.12)] lg:hidden"
+    data-menu-panel
+    hidden
+  >
+    <nav class:list={[pagePaddingClass, 'flex flex-col py-4']} aria-label="Principal móvil">
+      {
+        navigation.map((item) => (
+          <a
+            href={item.href}
+            class="border-b border-cyan/10 py-4 text-sm font-semibold tracking-[0.16em] text-cyan uppercase last:border-b-0"
+            data-menu-link
+          >
+            {item.label}
+          </a>
+        ))
+      }
+    </nav>
+  </div>
+</header>
+
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
+  const panel = document.querySelector<HTMLElement>('[data-menu-panel]');
+  const openIcon = document.querySelector('[data-menu-open-icon]');
+  const closeIcon = document.querySelector('[data-menu-close-icon]');
+  const links = document.querySelectorAll('[data-menu-link]');
+
+  if (toggle && panel) {
+    const setOpen = (open: boolean) => {
+      toggle.setAttribute('aria-expanded', String(open));
+      toggle.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
+      panel.hidden = !open;
+      panel.classList.toggle('hidden', !open);
+      openIcon?.classList.toggle('hidden', open);
+      closeIcon?.classList.toggle('hidden', !open);
+      document.body.classList.toggle('overflow-hidden', open);
+    };
+
+    toggle.addEventListener('click', () => {
+      setOpen(toggle.getAttribute('aria-expanded') !== 'true');
+    });
+
+    links.forEach((link) => {
+      link.addEventListener('click', () => setOpen(false));
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') setOpen(false);
+    });
+
+    const desktop = window.matchMedia('(min-width: 1024px)');
+    desktop.addEventListener('change', (event) => {
+      if (event.matches) setOpen(false);
+    });
+  }
+</script>
