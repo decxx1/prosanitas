@@ -1,6 +1,12 @@
 ---
+import AboutSection from '@/components/AboutSection.astro';
+import ArtSection from '@/components/ArtSection.astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import CadeidCta from '@/components/CadeidCta.astro';
+import CompanySection from '@/components/CompanySection.astro';
+import ContactCta from '@/components/ContactCta.astro';
 import HeroCarousel from '@/components/HeroCarousel.astro';
+import ServicesSection from '@/components/ServicesSection.astro';
 
 const title = 'Prosanitas Salud | Cuidamos tu bienestar';
 const metaDescription =
@@ -27,5 +33,11 @@ const metaDescription =
 >
   <main id="contenido">
     <HeroCarousel />
+    <AboutSection />
+    <ServicesSection />
+    <CompanySection />
+    <ArtSection />
+    <CadeidCta />
+    <ContactCta />
   </main>
 </BaseLayout>

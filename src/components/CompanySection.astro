@@ -1,0 +1,131 @@
+---
+import { containerClass } from '@/data/layout';
+import AccordionCard from '@/components/AccordionCard.astro';
+import ResultMetrics from '@/components/ResultMetrics.astro';
+
+const programs = [
+  {
+    src: '/images/company/prevencion-inteligente.jpeg',
+    alt: 'Médica señala un tablero de indicadores de salud frente a colegas en una oficina.',
+    title: 'Prevención Inteligente',
+    items: [
+      'Evaluación de riesgo individual y poblacional',
+      'Detección precoz de enfermedades prevalentes por grupos etarios',
+      'Construcción del perfil epidemiológico empresarial',
+      'Informes estratégicos para decisiones de gestión',
+    ],
+  },
+  {
+    src: '/images/company/medicina-in-company.jpeg',
+    alt: 'Equipo de salud ocupacional en una reunión de trabajo en una sala de juntas.',
+    title: 'Medicina in Company',
+    items: [
+      'Atención médica en planta o modalidad híbrida',
+      'Telemedicina ágil y resolutiva',
+      'Programas específicos (HTA, estrés, sueño, nutrición)',
+      'Educación sanitaria continua y aplicada',
+    ],
+  },
+  {
+    src: '/images/company/salud-lideres-posiciones-estrategicas.jpeg',
+    alt: 'Médica y profesionales analizan un plan de salud en una mesa de trabajo.',
+    title: 'Salud para Líderes y Posiciones Estratégicas',
+    items: [
+      'Evaluación integral de salud y factores de riesgo',
+      'Detección precoz de patologías cardiovasculares y metabólicas',
+      'Seguimiento médico personalizado',
+      'Gestión del estrés y prevención del burnout',
+      'Hábitos saludables: sueño, nutrición y actividad física',
+    ],
+  },
+  {
+    src: '/images/company/gestion-del-ausentismo.jpeg',
+    alt: 'Médico muestra un informe en tablet a un trabajador durante una consulta.',
+    title: 'Gestión del Ausentismo',
+    items: [
+      'Seguimiento médico personalizado del trabajador',
+      'Optimización de tiempos de recuperación',
+      'Evaluación de capacidad laboral',
+      'Análisis de causas de ausentismo',
+      'Diseño de planes de reducción de días caídos',
+    ],
+  },
+  {
+    src: '/images/company/campanas-de-vacunacion.jpeg',
+    alt: 'Profesional de la salud aplica una vacuna a un trabajador en su lugar de trabajo.',
+    title: 'Campañas de Vacunación',
+    items: [
+      'Calendario de vacunación completo y al día',
+      'Aplicación en planta, domicilio o modalidad híbrida',
+      'Campañas estacionales: gripe, refuerzos y brotes',
+      'Registro y seguimiento de coberturas',
+      'Concientización: informar',
+    ],
+  },
+];
+
+const results = [
+  {
+    src: '/images/icons/company/calendar-red-company.svg',
+    label: 'Reducción del ausentismo evitable',
+  },
+  {
+    src: '/images/icons/company/chart-red-company.svg',
+    label: 'Disminución de costos operativos',
+  },
+  {
+    src: '/images/icons/company/chart-up-red-company.svg',
+    label: 'Mejora de la productividad',
+  },
+  {
+    src: '/images/icons/company/people-red-company.svg',
+    label: 'Mayor compromiso del equipo',
+  },
+  {
+    src: '/images/icons/company/happy-red-company.svg',
+    label: 'Clima laboral más saludable',
+  },
+];
+---
+
+<section id="empresa" class="scroll-mt-(--header-height) bg-cream py-16 sm:py-20 lg:py-24" aria-labelledby="empresa-titulo">
+  <div class={containerClass}>
+    <h2 id="empresa-titulo" class="text-3xl font-bold tracking-tight text-hero-filter sm:text-4xl">
+      Salud Empresarial
+    </h2>
+    <p class="mt-3 text-base text-hero-filter sm:text-lg">
+      Ponemos en valor la salud como estrategia empresarial.
+    </p>
+
+    <div class="mt-10 grid items-start gap-8 md:grid-cols-3 md:gap-6 lg:gap-8">
+      {
+        programs.map((program, index) => (
+          <AccordionCard
+            src={program.src}
+            alt={program.alt}
+            title={program.title}
+            items={program.items}
+            panelId={`empresa-panel-${index}`}
+            triggerClass="bg-hero-filter"
+            panelClass="bg-white"
+          />
+        ))
+      }
+    </div>
+
+    <div class="mt-16 sm:mt-20">
+      <h3 class="text-2xl font-bold tracking-tight text-hero-filter sm:text-3xl">
+        Resultados concretos para su empresa
+      </h3>
+      <p class="mt-3 max-w-4xl text-base italic text-hero-filter sm:text-lg">
+        “Cuando una empresa cuida estratégicamente a su gente, mejora su rendimiento, reduce costos y fortalece su futuro.”
+      </p>
+
+      <ResultMetrics
+        items={results}
+        columnsClass="grid-cols-2 sm:grid-cols-3 lg:grid-cols-5"
+        toneClass="text-hero-filter border-hero-filter"
+      />
+    </div>
+  </div>
+</section>

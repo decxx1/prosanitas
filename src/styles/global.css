@@ -8,7 +8,11 @@
   --color-cream: #f3f3ee;
   --color-cyan: #4693b6;
   --color-cyan-dark: #2f6f8c;
+  --color-cyan-mid: #5293b1;
   --color-hero-filter: #296583;
+  --color-red: #b43e35;
+  --color-lavender: #bfd0f4;
+  --color-whatsapp: #25d366;
 
   --color-brand-50: #effdf7;
   --color-brand-100: #d8f8e9;
@@ -21,6 +25,7 @@
   --color-brand-800: #125846;
   --color-brand-900: #10493b;
   --color-brand-950: #082a23;
+	--breakpoint-xs: 480px;
 }
 
 @layer base {

@@ -1,0 +1,139 @@
+---
+const fields = [
+  { name: 'name', type: 'text', label: 'Nombre y apellido', autocomplete: 'name' },
+  { name: 'email', type: 'email', label: 'Email', autocomplete: 'email' },
+  { name: 'phone', type: 'tel', label: 'Teléfono', autocomplete: 'tel' },
+] as const;
+---
+
+<form data-contact-form class="mt-3 space-y-2" aria-labelledby="footer-formulario-titulo">
+  {fields.map((field) => (
+    <label class="block">
+      <span class="sr-only">{field.label} (obligatorio)</span>
+      <input
+        type={field.type}
+        name={field.name}
+        placeholder={`${field.label}*`}
+        autocomplete={field.autocomplete}
+        aria-describedby={`contact-error-${field.name}`}
+        required
+        class="w-full rounded-lg bg-white px-3 py-2 text-base text-hero-filter placeholder:text-hero-filter focus-visible:outline-lavender sm:text-lg"
+      />
+      <span id={`contact-error-${field.name}`} data-field-error={field.name} class="mt-1 block text-sm text-white" hidden></span>
+    </label>
+  ))}
+  <label class="block">
+    <span class="sr-only">Consulta (obligatoria)</span>
+    <textarea name="message" placeholder="Consulta*" rows={5} required aria-describedby="contact-error-message" class="block w-full resize-y rounded-lg bg-white px-3 py-2 text-base text-hero-filter placeholder:text-hero-filter focus-visible:outline-lavender sm:text-lg"></textarea>
+    <span id="contact-error-message" data-field-error="message" class="mt-1 block text-sm text-white" hidden></span>
+  </label>
+  <p data-form-status role="status" aria-live="polite" class="text-sm leading-snug" hidden></p>
+  <div class="flex justify-end">
+    <button type="submit" class="cursor-pointer rounded-md bg-lavender px-3 py-0.5 text-base font-bold leading-tight text-hero-filter transition-opacity hover:opacity-90 disabled:cursor-wait disabled:opacity-60">Enviar</button>
+  </div>
+</form>
+
+<script>
+  import { CONTACT_EMAIL, ENDPOINT, SECRET_KEY, SITE_KEY } from 'astro:env/client';
+
+  type Recaptcha = {
+    ready: (callback: () => void) => void;
+    execute: (siteKey: string, options: { action: string }) => Promise<string>;
+  };
+  type ApiError = { message?: string; errors?: Record<string, string | string[]> };
+
+  const initContactForms = () => {
+    document.querySelectorAll<HTMLFormElement>('[data-contact-form]').forEach((form) => {
+      if (form.dataset.ready) return;
+      form.dataset.ready = 'true';
+      const button = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+      const status = form.querySelector<HTMLElement>('[data-form-status]')!;
+      const errors = [...form.querySelectorAll<HTMLElement>('[data-field-error]')];
+
+      const clearErrors = () => {
+        errors.forEach((error) => {
+          error.hidden = true;
+          error.textContent = '';
+        });
+        form.querySelectorAll('[aria-invalid]').forEach((field) => field.removeAttribute('aria-invalid'));
+      };
+      form.addEventListener('input', (event) => {
+        const field = event.target;
+        if (!(field instanceof HTMLInputElement || field instanceof HTMLTextAreaElement)) return;
+        field.removeAttribute('aria-invalid');
+        const error = errors.find((element) => element.dataset.fieldError === field.name);
+        if (error) error.hidden = true;
+      });
+
+      form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        if (button.disabled || !form.reportValidity()) return;
+        button.disabled = true;
+        button.textContent = 'Enviando…';
+        form.setAttribute('aria-busy', 'true');
+        status.hidden = true;
+        clearErrors();
+
+        try {
+          const recaptcha = (window as Window & { grecaptcha?: Recaptcha }).grecaptcha;
+          const siteKey = SITE_KEY;
+          if (!recaptcha || !siteKey || !SECRET_KEY || !ENDPOINT || !CONTACT_EMAIL) {
+            throw new Error('No pudimos iniciar el envío. Por favor, contactanos por email o teléfono.');
+          }
+          const token = await new Promise<string>((resolve, reject) => {
+            const timeout = window.setTimeout(() => reject(new Error('No pudimos verificar reCAPTCHA. Intentá nuevamente.')), 15000);
+            recaptcha.ready(() => {
+              recaptcha.execute(siteKey, { action: 'contacto' }).then(resolve, reject).finally(() => window.clearTimeout(timeout));
+            });
+          });
+          const values = new FormData(form);
+          const name = String(values.get('name') ?? '').trim();
+          const response = await fetch(ENDPOINT, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              name,
+              phone: String(values.get('phone') ?? '').trim(),
+              email: String(values.get('email') ?? '').trim(),
+              message: String(values.get('message') ?? '').trim(),
+              secret_key: SECRET_KEY,
+              addressee: CONTACT_EMAIL ?? '',
+              asunto: `Contacto desde la web - de: ${name}`,
+              token,
+            }),
+            signal: AbortSignal.timeout(20000),
+          });
+          if (!response.ok) {
+            const apiError: ApiError = await response.json().catch(() => ({}));
+            throw apiError;
+          }
+          status.textContent = 'Tu consulta se envió correctamente. Nos pondremos en contacto con vos.';
+          form.reset();
+        } catch (error) {
+          const apiError = error as ApiError | null;
+          if (apiError?.errors) {
+            errors.forEach((element) => {
+              const name = element.dataset.fieldError!;
+              const message = apiError.errors?.[name];
+              if (!message) return;
+              element.textContent = Array.isArray(message) ? message.join(' ') : message;
+              element.hidden = false;
+              const field = form.elements.namedItem(name);
+              if (field instanceof HTMLElement) field.setAttribute('aria-invalid', 'true');
+            });
+            status.textContent = 'Revisá los campos indicados e intentá nuevamente.';
+          } else {
+            status.textContent = apiError?.message || 'No pudimos enviar tu consulta. Intentá nuevamente o contactanos por email o teléfono.';
+          }
+        } finally {
+          status.hidden = false;
+          button.disabled = false;
+          button.textContent = 'Enviar';
+          form.removeAttribute('aria-busy');
+        }
+      });
+    });
+  };
+  initContactForms();
+  document.addEventListener('astro:page-load', initContactForms);
+</script>

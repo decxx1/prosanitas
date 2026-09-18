@@ -1,0 +1,83 @@
+---
+import { Icon } from 'astro-icon/components';
+import { containerClass } from '@/data/layout';
+---
+
+<section data-contact-cta class="bg-white py-16 sm:py-20 lg:py-24" aria-labelledby="contacto-cta-titulo">
+  <div class={containerClass}>
+    <div class="relative isolate overflow-hidden rounded-3xl bg-lavender px-6 py-14 sm:px-10 sm:py-16 lg:px-12 lg:py-14">
+      <img
+        src="/images/icons/shape-transparent-iso.svg"
+        alt=""
+        width="1024"
+        height="772"
+        class="pointer-events-none absolute top-1/2 -right-9 z-[-1] w-72 -translate-y-1/2 select-none opacity-35 sm:-right-7 sm:w-96 lg:-right-5 lg:w-104"
+        aria-hidden="true"
+      />
+
+      <div class="max-w-3xl text-hero-filter">
+        <h2 id="contacto-cta-titulo" class="text-3xl font-bold leading-tight tracking-tight sm:text-4xl">
+          Cuidar la salud es un camino compartido.
+        </h2>
+        <p class="mt-6 max-w-2xl text-2xl font-bold leading-tight tracking-tight sm:text-3xl">
+          Contáctanos para diseñar la solución de salud adecuada para tu empresa o familia.
+        </p>
+
+        <a
+          href="/#contacto"
+          data-contact-static
+          class="mt-8 inline-flex items-center gap-5 rounded-full bg-red px-5 py-2 text-base font-bold leading-tight text-white transition-[opacity,background-color] duration-500 hover:bg-whatsapp focus-visible:outline-white sm:px-6"
+          aria-label="Solicitar información o consulta personalizada"
+        >
+          <span class="max-w-48">Solicitar información o consulta personalizada.</span>
+          <Icon name="mdi:whatsapp" class="size-9 shrink-0" aria-hidden="true" />
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<a
+  href="/#contacto"
+  data-contact-floating
+  class="fixed right-4 bottom-4 z-50 inline-flex max-w-[calc(100vw-2rem)] translate-y-3 scale-95 items-center gap-4 rounded-full bg-whatsapp px-5 py-2 text-base font-bold leading-tight text-white opacity-0 shadow-lg transition-[opacity,transform,visibility,background-color] duration-500 ease-out invisible hover:bg-red focus-visible:outline-white sm:right-6 sm:bottom-6 sm:px-6"
+  aria-label="Solicitar información o consulta personalizada"
+  aria-hidden="true"
+  tabindex="-1"
+>
+  <span class="max-w-48">Solicitar información o consulta personalizada.</span>
+  <Icon name="mdi:whatsapp" class="size-9 shrink-0" aria-hidden="true" />
+</a>
+
+<script is:inline>
+  const contactCta = document.querySelector('[data-contact-cta]');
+  const floatingContact = document.querySelector('[data-contact-floating]');
+
+  if (contactCta && floatingContact) {
+    const staticContact = contactCta.querySelector('[data-contact-static]');
+
+    const updateFloatingContact = (isVisible) => {
+      floatingContact.classList.toggle('invisible', isVisible);
+      floatingContact.classList.toggle('opacity-0', isVisible);
+      floatingContact.classList.toggle('translate-y-3', isVisible);
+      floatingContact.classList.toggle('scale-95', isVisible);
+      floatingContact.classList.toggle('pointer-events-none', isVisible);
+      floatingContact.classList.toggle('visible', !isVisible);
+      floatingContact.classList.toggle('opacity-100', !isVisible);
+      floatingContact.classList.toggle('translate-y-0', !isVisible);
+      floatingContact.classList.toggle('scale-100', !isVisible);
+      floatingContact.classList.toggle('pointer-events-auto', !isVisible);
+      staticContact?.classList.toggle('opacity-0', !isVisible);
+      staticContact?.classList.toggle('opacity-100', isVisible);
+      floatingContact.setAttribute('aria-hidden', String(isVisible));
+      floatingContact.tabIndex = isVisible ? -1 : 0;
+    };
+
+    const observer = new IntersectionObserver(
+      ([entry]) => updateFloatingContact(entry.isIntersecting),
+      { threshold: 0.15 },
+    );
+
+    observer.observe(contactCta);
+  }
+</script>

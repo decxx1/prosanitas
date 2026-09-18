@@ -1,0 +1,147 @@
+---
+interface Props {
+  src: string;
+  alt: string;
+  title: string;
+  items: string[];
+  panelId: string;
+  triggerClass?: string;
+  panelClass?: string;
+}
+
+const {
+  src,
+  alt,
+  title,
+  items,
+  panelId,
+  triggerClass = 'bg-cyan',
+  panelClass = 'bg-cream',
+} = Astro.props;
+---
+
+<article>
+  <img
+    src={src}
+    alt={alt}
+    width="640"
+    height="360"
+    class="aspect-16/10 w-full rounded-2xl object-cover"
+    loading="lazy"
+    decoding="async"
+  />
+  <div class="group mt-3" data-accordion data-expanded="false">
+    <button
+      type="button"
+      data-accordion-trigger
+      aria-expanded="false"
+      aria-controls={panelId}
+      class:list={[
+        'flex w-full cursor-pointer items-center justify-between gap-3 rounded-xl px-5 py-2.5 text-left text-white group-data-[expanded=true]:rounded-b-none',
+        triggerClass,
+      ]}
+    >
+      <h3 class="text-sm font-semibold lg:text-base">{title}</h3>
+      <svg
+        class="size-5 shrink-0 transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-data-[expanded=true]:rotate-180"
+        viewBox="0 0 24 24"
+        fill="none"
+        aria-hidden="true"
+      >
+        <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+      </svg>
+    </button>
+    <div id={panelId} data-accordion-panel class="h-0 overflow-hidden" aria-hidden="true">
+      <div class:list={['rounded-b-xl px-5 pb-4 pt-3', panelClass]}>
+        <ul class="list-disc space-y-1 pl-5 text-sm leading-relaxed text-hero-filter lg:text-base">
+          {items.map((item) => <li>{item}</li>)}
+        </ul>
+      </div>
+    </div>
+  </div>
+</article>
+
+<script>
+  const initAccordions = () => {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const duration = reduced ? 0 : 700;
+    const easing = 'cubic-bezier(0.22, 1, 0.36, 1)';
+
+    document.querySelectorAll<HTMLElement>('[data-accordion]').forEach((accordion) => {
+      const trigger = accordion.querySelector<HTMLElement>('[data-accordion-trigger]');
+      const panel = accordion.querySelector<HTMLElement>('[data-accordion-panel]');
+      if (!trigger || !panel || accordion.dataset.bound === 'true') return;
+
+      accordion.dataset.bound = 'true';
+
+      const setExpanded = (expanded: boolean) => {
+        accordion.dataset.expanded = expanded ? 'true' : 'false';
+        trigger.setAttribute('aria-expanded', String(expanded));
+        panel.setAttribute('aria-hidden', String(!expanded));
+      };
+
+      const openPanel = () => {
+        setExpanded(true);
+
+        if (!duration) {
+          panel.style.height = 'auto';
+          return;
+        }
+
+        panel.style.overflow = 'hidden';
+        panel.style.height = '0px';
+        const target = panel.scrollHeight;
+        void panel.offsetHeight;
+        panel.style.transition = `height ${duration}ms ${easing}`;
+        panel.style.height = `${target}px`;
+
+        panel.addEventListener(
+          'transitionend',
+          (event) => {
+            if (event.propertyName !== 'height' || accordion.dataset.expanded !== 'true') return;
+            panel.style.height = 'auto';
+            panel.style.overflow = '';
+            panel.style.transition = '';
+          },
+          { once: true }
+        );
+      };
+
+      const closePanel = () => {
+        setExpanded(false);
+
+        if (!duration) {
+          panel.style.height = '0px';
+          return;
+        }
+
+        panel.style.overflow = 'hidden';
+        panel.style.height = `${panel.scrollHeight}px`;
+        void panel.offsetHeight;
+        panel.style.transition = `height ${duration}ms ${easing}`;
+        panel.style.height = '0px';
+
+        panel.addEventListener(
+          'transitionend',
+          (event) => {
+            if (event.propertyName !== 'height') return;
+            panel.style.overflow = '';
+            panel.style.transition = '';
+          },
+          { once: true }
+        );
+      };
+
+      trigger.addEventListener('click', () => {
+        if (accordion.dataset.expanded === 'true') {
+          closePanel();
+        } else {
+          openPanel();
+        }
+      });
+    });
+  };
+
+  initAccordions();
+  document.addEventListener('astro:page-load', initAccordions);
+</script>

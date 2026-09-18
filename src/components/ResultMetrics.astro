@@ -1,0 +1,29 @@
+---
+interface Item {
+  src: string;
+  label: string;
+}
+
+interface Props {
+  items: Item[];
+  columnsClass?: string;
+  toneClass?: string;
+}
+
+const { items, columnsClass = 'grid-cols-2 lg:grid-cols-4', toneClass = 'text-cyan border-cyan' } = Astro.props;
+---
+
+<ul class:list={['mt-12 grid gap-10 lg:gap-8', columnsClass]}>
+  {
+    items.map((item) => (
+      <li class="flex flex-col items-center text-center">
+        <div class:list={['flex size-28 items-center justify-center rounded-full border-2 sm:size-32 lg:size-36', toneClass]}>
+          <img src={item.src} alt="" class="h-auto w-12 sm:w-16 lg:w-20" />
+        </div>
+        <p class:list={['mt-5 max-w-48 border-t-2 pt-3 text-sm font-bold lg:text-base', toneClass]}>
+          {item.label}
+        </p>
+      </li>
+    ))
+  }
+</ul>

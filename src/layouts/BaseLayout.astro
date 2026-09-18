@@ -1,6 +1,7 @@
 ---
 import { SITE_KEY } from 'astro:env/client';
 import SiteHeader from '@/components/SiteHeader.astro';
+import SiteFooter from '@/components/SiteFooter.astro';
 import '@/styles/global.css';
 
 export interface PreloadResource {
@@ -124,13 +125,23 @@ const recaptchaUrl = SITE_KEY
       FORM: Mockup del cliente; pedido preciso, sin concept-seed.
       FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
     -->
-    <a
-      href="#contenido"
-      class="sr-only fixed left-4 top-4 z-50 rounded-md bg-cyan px-4 py-2 text-white focus:not-sr-only"
-    >
-      Saltar al contenido
-    </a>
     <SiteHeader />
     <slot />
+    <SiteFooter />
   </body>
 </html>
+<style is:global>
+	/*recaptcha*/
+	.grecaptcha-badge {
+		width: 70px !important;
+		height: 60px !important;
+		overflow: hidden !important;
+		transition: all 0.3s ease !important;
+		left: 4px !important;
+		z-index: 100;
+	}
+
+	.grecaptcha-badge:hover {
+		width: 256px !important;
+	}
+</style>

@@ -36,7 +36,7 @@ const currentHash = Astro.url.hash;
 
     <button
       type="button"
-      class="inline-flex size-11 items-center justify-center text-cyan lg:hidden"
+      class="cursor-pointer inline-flex size-11 items-center justify-center text-cyan lg:hidden"
       data-menu-toggle
       aria-expanded="false"
       aria-controls="menu-movil"
@@ -44,7 +44,7 @@ const currentHash = Astro.url.hash;
     >
       <span class="sr-only">Menú</span>
       <svg class="size-6" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path data-menu-open-icon d="M4 7h16M4 17h16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path>
+        <path data-menu-open-icon d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path>
         <path data-menu-close-icon class="hidden" d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path>
       </svg>
     </button>

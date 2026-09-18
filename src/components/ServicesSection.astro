@@ -1,0 +1,131 @@
+---
+import { containerClass } from '@/data/layout';
+import AccordionCard from '@/components/AccordionCard.astro';
+import ResultMetrics from '@/components/ResultMetrics.astro';
+
+const services = [
+  {
+    src: '/images/services/internacion-domiciliaria.jpeg',
+    alt: 'Enfermera toma la mano de una paciente mayor durante una internación domiciliaria.',
+    title: 'Internación domiciliaria',
+    items: [
+      'Médicos generalistas e intensivistas',
+      'Rehabilitación motora, respiratoria y neurológica',
+      'Enfermería especializada',
+      'Fonoaudiología',
+      'Nutrición y alimentación enteral',
+      'Psicología',
+      'Terapia ocupacional',
+      'Acompañantes terapéuticos',
+      'Otros servicios: Aparatología e insumos médicos: respiradores, bombas de infusión, saturómetros, oxígeno, camas ortopédicas',
+      'Diseño de plan de contingencia a medida para pacientes complejizados',
+    ],
+  },
+  {
+    src: '/images/services/especialidades-medicas.jpeg',
+    alt: 'Equipo de profesionales de la salud con fonendoscopios en un entorno clínico.',
+    title: 'Especialidades médicas',
+    items: [
+      'Médico clínico',
+      'Pediatra',
+      'Subespecialidades: cardiología, fisiatría, neurología, endocrinología, psiquiatría, reumatología',
+    ],
+  },
+  {
+    src: '/images/services/atencion-primaria-salud.jpeg',
+    alt: 'Médico sostiene un fonendoscopio sobre el pecho, listo para una consulta.',
+    title: 'Atención primaria de la salud',
+    items: [
+      'Control embarazo y niño sano',
+      'Vacunación',
+      'Planes nutricionales',
+      'Controles de salud periódicos para cada grupo etario',
+    ],
+  },
+  {
+    src: '/images/services/medicina-paliativa.jpeg',
+    alt: 'Manos de un profesional y un paciente unidas en un gesto de acompañamiento.',
+    title: 'Medicina paliativa',
+    items: [
+      'Tratamiento del dolor, patologías crónicas; acompañamiento y asistencia al final de la vida.',
+    ],
+  },
+  {
+    src: '/images/services/diagnostico-por-imagenes.jpeg',
+    alt: 'Profesional observa una radiografía de tórax en un visor de diagnóstico.',
+    title: 'Diagnóstico por imágenes',
+    items: ['Ecografías, radiografía, ECG, laboratorio clínico'],
+  },
+  {
+    src: '/images/services/atencion-integral-adulto-mayor.jpeg',
+    alt: 'Médica sonríe junto a una paciente mayor durante una consulta en el hogar.',
+    title: 'Atención integral al adulto mayor',
+    items: [
+      'Asistencia a la dependencia con cuidadores domiciliarios, acompañantes terapéuticos y actividades lúdicas y recreativas en el hogar.',
+    ],
+  },
+  {
+    src: '/images/services/tratamientos-especificos.jpeg',
+    alt: 'Profesional realiza un tratamiento específico en el pie de un paciente.',
+    title: 'Tratamientos específicos',
+    items: ['Escaras, pie diabético, nutrición enteral (adultos y pediátrica)'],
+  },
+];
+
+const results = [
+  {
+    src: '/images/icons/services/chart-red-services.svg',
+    label: 'Menor tasa de infecciones intrahospitalarias',
+  },
+  {
+    src: '/images/icons/services/alert-red-services.svg',
+    label: 'Reducción de la huella de carbono',
+  },
+  {
+    src: '/images/icons/services/money-red-services.svg',
+    label: 'Ahorro de recursos institucionales',
+  },
+  {
+    src: '/images/icons/services/sync-red-services.svg',
+    label: 'Modelos de atención más sustentables',
+  },
+];
+---
+
+<section id="servicios" class="scroll-mt-(--header-height) bg-white py-16 sm:py-20 lg:py-24" aria-labelledby="servicios-titulo">
+  <div class={containerClass}>
+    <h2 id="servicios-titulo" class="text-3xl font-bold tracking-tight text-cyan sm:text-4xl">
+      Prestaciones Médicas Domiciliarias
+    </h2>
+    <p class="mt-3 text-base text-cyan sm:text-lg">
+      Cuidado integral y personalizado en el entorno más adecuado: el hogar.
+    </p>
+
+    <div class="mt-10 grid items-start gap-8 md:grid-cols-3 md:gap-6 lg:gap-8">
+      {
+        services.map((service, index) => (
+          <AccordionCard
+            src={service.src}
+            alt={service.alt}
+            title={service.title}
+            items={service.items}
+            panelId={`servicio-panel-${index}`}
+            triggerClass="bg-cyan"
+            panelClass="bg-cream"
+          />
+        ))
+      }
+    </div>
+
+    <div class="mt-16 sm:mt-20">
+      <h3 class="text-2xl font-bold tracking-tight text-cyan sm:text-3xl">
+        Resultados concretos de la Internación Domiciliaria
+      </h3>
+      <p class="mt-3 max-w-4xl text-base italic text-cyan sm:text-lg">
+        “Cuando el cuidado se traslada al hogar, se reducen infecciones, se optimizan recursos y se cuida el ambiente.”
+      </p>
+
+      <ResultMetrics items={results} />
+    </div>
+  </div>
+</section>
