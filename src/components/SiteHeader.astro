@@ -5,8 +5,17 @@ import { navigation } from '@/data/navigation';
 const currentHash = Astro.url.hash;
 ---
 
-<header class="sticky top-0 z-50 h-(--header-height) bg-cream">
-  <div class:list={[pagePaddingClass, 'flex h-full items-center justify-between gap-6']}>
+<header
+  class="sticky top-0 z-50 h-(--header-height) bg-cream transition-shadow duration-300 ease-in-out"
+  data-site-header
+>
+  <div
+    class:list={[
+      pagePaddingClass,
+      'flex h-full items-center justify-between gap-6 transition-[max-width,margin] duration-300 ease-in-out',
+    ]}
+    data-header-inner
+  >
     <a href="/" class="shrink-0" aria-label="Prosanitas, inicio">
       <img
         src="/images/logos/prosanitas-cyan.svg"
@@ -73,6 +82,26 @@ const currentHash = Astro.url.hash;
 </header>
 
 <script>
+  const header = document.querySelector<HTMLElement>('[data-site-header]');
+  const headerInner = document.querySelector<HTMLElement>('[data-header-inner]');
+  const desktop = window.matchMedia('(min-width: 1024px)');
+
+  const updateScrollState = () => {
+    const scrolled = window.scrollY > 0;
+
+    header?.classList.toggle('shadow-[0_4px_20px_rgba(20,50,70,0.1)]', scrolled);
+
+    if (headerInner) {
+      const useContainer = scrolled && desktop.matches;
+      headerInner.classList.toggle('container', useContainer);
+      headerInner.classList.toggle('mx-auto', useContainer);
+    }
+  };
+
+  updateScrollState();
+  window.addEventListener('scroll', updateScrollState, { passive: true });
+  desktop.addEventListener('change', updateScrollState);
+
   const toggle = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
   const panel = document.querySelector<HTMLElement>('[data-menu-panel]');
   const openIcon = document.querySelector('[data-menu-open-icon]');
@@ -102,7 +131,6 @@ const currentHash = Astro.url.hash;
       if (event.key === 'Escape') setOpen(false);
     });
 
-    const desktop = window.matchMedia('(min-width: 1024px)');
     desktop.addEventListener('change', (event) => {
       if (event.matches) setOpen(false);
     });
