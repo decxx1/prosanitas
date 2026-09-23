@@ -40,10 +40,10 @@ const highlights = [
 
 <section id="quienes-somos" class="scroll-mt-(--header-height) bg-cream py-16 sm:py-20 lg:py-24" aria-labelledby="quienes-somos-titulo">
   <div class={containerClass}>
-    <h2 id="quienes-somos-titulo" class="text-3xl font-bold tracking-tight text-hero-filter sm:text-4xl">
+    <h2 id="quienes-somos-titulo" class="text-3xl font-bold tracking-tight text-hero-filter sm:text-4xl" data-aos="fade-up">
       Quiénes somos
     </h2>
-    <p class="mt-4 max-w-4xl text-base leading-relaxed text-hero-filter sm:text-lg">
+    <p class="mt-4 max-w-4xl text-base leading-relaxed text-hero-filter sm:text-lg" data-aos="fade-up" data-aos-delay="100">
       Somos Prosanitas S.R.L., una empresa de San Juan con
       <strong> más de 10 años de trayectoria</strong> en el cuidado de la salud. Brindamos atención
       domiciliaria, salud empresarial y servicios para ART.
@@ -51,8 +51,8 @@ const highlights = [
 
     <div class="mt-10 grid gap-4 md:grid-cols-3 lg:gap-5">
       {
-        cards.map((card) => (
-          <article class:list={[card.tone, 'rounded-3xl p-6 text-white sm:p-7 lg:p-8']}>
+        cards.map((card, index) => (
+          <article class:list={[card.tone, 'rounded-3xl p-6 text-white sm:p-7 lg:p-8']} data-aos="fade-up" data-aos-delay={index * 100}>
             <h3 class="text-xl font-bold tracking-tight lg:text-2xl">{card.title}</h3>
             {card.values ? (
               <ul class="mt-4 list-disc space-y-1 pl-5 text-base leading-relaxed lg:text-lg">
@@ -70,8 +70,8 @@ const highlights = [
 
     <ul class="mt-14 grid gap-10 sm:grid-cols-3 sm:gap-6">
       {
-        highlights.map((item) => (
-          <li class="flex flex-col items-center text-center">
+        highlights.map((item, index) => (
+          <li class="flex flex-col items-center text-center" data-aos="fade-up" data-aos-delay={index * 100}>
             <img src={item.src} alt={item.alt} width="64" height="64" class="h-14 w-auto" />
             <p class="mt-5 rounded-full bg-cyan px-6 py-1.5 text-sm font-semibold text-white lg:px-7 lg:py-1.5 lg:text-lg">
               {item.label}

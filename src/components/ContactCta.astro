@@ -5,7 +5,7 @@ import { containerClass } from '@/data/layout';
 
 <section data-contact-cta class="bg-white py-16 sm:py-20 lg:py-24" aria-labelledby="contacto-cta-titulo">
   <div class={containerClass}>
-    <div class="relative isolate overflow-hidden rounded-3xl bg-lavender px-6 py-14 sm:px-10 sm:py-16 lg:px-12 lg:py-14">
+    <div class="relative isolate overflow-hidden rounded-3xl bg-lavender px-6 py-14 sm:px-10 sm:py-16 lg:px-12 lg:py-14" data-aos="fade-up">
       <img
         src="/images/icons/shape-transparent-iso-red.svg"
         alt=""
@@ -78,6 +78,6 @@ import { containerClass } from '@/data/layout';
       { threshold: 0.15 },
     );
 
-    observer.observe(contactCta);
+    observer.observe(staticContact ?? contactCta);
   }
 </script>

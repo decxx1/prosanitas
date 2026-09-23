@@ -75,7 +75,7 @@ const slides = [
         slides.map((slide, index) => (
           <div
             class:list={[
-              'relative col-start-1 row-start-1 transition-opacity duration-900 ease-out motion-reduce:transition-none',
+              'relative col-start-1 row-start-1 transition-opacity duration-500 ease-out motion-reduce:transition-none',
               index === 0 ? 'pointer-events-auto z-1 opacity-100' : 'pointer-events-none opacity-0',
             ]}
             data-copy
@@ -135,6 +135,8 @@ const slides = [
     };
 
     const setCopyActive = (copy: HTMLElement, active: boolean) => {
+      copy.style.transitionDuration = active ? '450ms' : '200ms';
+      copy.style.transitionDelay = active ? '200ms' : '0ms';
       copy.classList.toggle('opacity-100', active);
       copy.classList.toggle('opacity-0', !active);
       copy.classList.toggle('pointer-events-auto', active);

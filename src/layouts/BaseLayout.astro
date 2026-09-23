@@ -1,5 +1,6 @@
 ---
 import { SITE_KEY } from 'astro:env/client';
+import 'aos/dist/aos.css';
 import SiteHeader from '@/components/SiteHeader.astro';
 import SiteFooter from '@/components/SiteFooter.astro';
 import '@/styles/global.css';
@@ -112,6 +113,10 @@ const recaptchaUrl = SITE_KEY
       <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData)} />
     )}
 
+    <noscript>
+      <style>[data-aos] { opacity: 1 !important; transform: none !important; }</style>
+    </noscript>
+
     <slot name="head" />
 
     {recaptchaUrl && <script is:inline async src={recaptchaUrl}></script>}
@@ -128,6 +133,42 @@ const recaptchaUrl = SITE_KEY
     <SiteHeader />
     <slot />
     <SiteFooter />
+
+    <script>
+      import AOS from 'aos';
+
+      let aosInitialized = false;
+
+      const initializeAos = () => {
+        if (aosInitialized) {
+          AOS.refreshHard();
+          return;
+        }
+
+        AOS.init({
+          anchorPlacement: 'top-bottom',
+          disable: () => window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+          disableMutationObserver: true,
+          duration: 650,
+          easing: 'ease-out-cubic',
+          offset: 50,
+          once: true,
+        });
+        aosInitialized = true;
+      };
+
+      initializeAos();
+      document.addEventListener('astro:page-load', initializeAos);
+      document.addEventListener('transitionend', (event) => {
+        if (
+          event.target instanceof HTMLElement &&
+          event.target.matches('[data-accordion-panel]') &&
+          event.propertyName === 'height'
+        ) {
+          AOS.refresh();
+        }
+      });
+    </script>
   </body>
 </html>
 <style is:global>

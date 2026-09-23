@@ -28,6 +28,17 @@
 	--breakpoint-xs: 480px;
 }
 
+/* AOS defaults to a 100px movement; a shorter reveal keeps the content steady. */
+body [data-aos='fade-up'].aos-init:not(.aos-animate) {
+  transform: translate3d(0, 22px, 0);
+}
+
+@media (max-width: 767px) {
+  body [data-aos][data-aos][data-aos-delay].aos-animate {
+    transition-delay: 0ms;
+  }
+}
+
 @layer base {
   :root {
     color-scheme: light;
@@ -58,5 +69,13 @@
   :focus-visible {
     outline: 3px solid #4693b6;
     outline-offset: 3px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-aos] {
+      opacity: 1 !important;
+      transform: none !important;
+      transition: none !important;
+    }
   }
 }
