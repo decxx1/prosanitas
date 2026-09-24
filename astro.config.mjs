@@ -34,7 +34,6 @@ export default defineConfig({
       CONTACT_INSTAGRAM_LABEL: envField.string({ context: 'client', access: 'public', optional: true }),
       SOCIAL_FACEBOOK_URL: envField.string({ context: 'client', access: 'public', optional: true }),
       SOCIAL_INSTAGRAM_URL: envField.string({ context: 'client', access: 'public', optional: true }),
-      SOCIAL_WHATSAPP_URL: envField.string({ context: 'client', access: 'public', optional: true }),
     },
   },
 });

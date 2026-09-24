@@ -9,8 +9,8 @@ import {
   CONTACT_INSTAGRAM_LABEL,
   SOCIAL_FACEBOOK_URL,
   SOCIAL_INSTAGRAM_URL,
-  SOCIAL_WHATSAPP_URL,
 } from 'astro:env/client';
+import { whatsappHref } from '@/data/contact';
 import { containerClass } from '@/data/layout';
 import ContactForm from '@/components/ContactForm.astro';
 
@@ -18,7 +18,6 @@ const socialContacts = [
   { label: CONTACT_FACEBOOK_LABEL, href: SOCIAL_FACEBOOK_URL, icon: 'qlementine-icons:facebook-16' },
   { label: CONTACT_INSTAGRAM_LABEL, href: SOCIAL_INSTAGRAM_URL, icon: 'mdi:instagram' },
 ];
-const phoneHref = (phone: string) => `tel:${phone.replace(/[^\d+]/g, '')}`;
 ---
 
 <footer id="contacto" class="scroll-mt-(--header-height)">
@@ -47,13 +46,13 @@ const phoneHref = (phone: string) => `tel:${phone.replace(/[^\d+]/g, '')}`;
                 <Icon name="mdi:whatsapp" class="size-7 shrink-0" aria-hidden="true" />
                 <span>
                   {CONTACT_PHONE_OPERATIONS && (
-                    <a href={SOCIAL_WHATSAPP_URL || phoneHref(CONTACT_PHONE_OPERATIONS)} class="hover:underline">
+                    <a href={whatsappHref(CONTACT_PHONE_OPERATIONS)} target="_blank" rel="noopener noreferrer" class="hover:underline">
                       {CONTACT_PHONE_OPERATIONS} (Operaciones)
                     </a>
                   )}
                   {CONTACT_PHONE_OPERATIONS && CONTACT_PHONE_ADMINISTRATION && ' | '}
                   {CONTACT_PHONE_ADMINISTRATION && (
-                    <a href={phoneHref(CONTACT_PHONE_ADMINISTRATION)} class="hover:underline">
+                    <a href={whatsappHref(CONTACT_PHONE_ADMINISTRATION)} target="_blank" rel="noopener noreferrer" class="hover:underline">
                       {CONTACT_PHONE_ADMINISTRATION} (Administración)
                     </a>
                   )}
